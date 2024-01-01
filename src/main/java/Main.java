@@ -35,20 +35,21 @@ public class Main {
         CloseableHttpResponse nasaResponse = httpClient.execute(nasaRequest);
         byte[] content = nasaResponse.getEntity().getContent().readAllBytes();
 
-        String[] urlList = url.split("/");
-        String name = urlList[urlList.length - 1];
-        String[] nameList = name.split("\\?");
-        String fileName = nameList[0];
-
-        File file = new File(fileName);
-        try {
-            if (file.createNewFile()) {
-                try (FileOutputStream fos = new FileOutputStream(fileName)) {
-                    fos.write(content, 0, content.length);
+        if (url.contains("youtube")) {
+            System.out.println("Сегодня без картинки, извини");
+        } else {
+            String[] urlList = url.split("/");
+            String fileName = urlList[urlList.length - 1];
+            File file = new File(fileName);
+            try {
+                if (file.createNewFile()) {
+                    try (FileOutputStream fos = new FileOutputStream(fileName)) {
+                        fos.write(content, 0, content.length);
+                    }
                 }
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
             }
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
         }
     }
 }
